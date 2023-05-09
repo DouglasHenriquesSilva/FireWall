@@ -1,0 +1,361 @@
+GNU nano 5.4 comandofw.sh                                
+#! /bin/sh
+
+eco""
+echo "### Autor: DOUGLAS HENRIQUES ###"
+eco""
+#----------------------Configurações Gerais--------------------
+
+#Habilitando o Encaminhamento de Pacotes NAT
+eco""
+echo "habilitando NAT"
+eco ""
+
+#nano /etc/sysctl.conf
+# /etc/sysctl.conf -> net.ipv4.ip_forwarding = 1 ACCEPT
+
+sysctl -p
+echo""
+# A linha "sysctl -p" é um comando usado em sistemas Unix e Unix-like (como o Linux) para carregar as # configurações do sistema a partir de um arquivo de configuração. O comando "sysctl" é usado para visualizar # e modificar parâmetros do kernel do sistema operacional, como as configurações de rede, memória, arquivos # do sistema e outros recursos do sistema. A opção "-p" é usada para carregar as configurações do sistema a # a partir do arquivo de configuração, # geralmente localizado em "/etc/sysctl.conf" ou em outro diretório # específico, e aplicar essas configurações imediatamente. Portanto, o comando "sysctl -p" carrega as # configurações do sistema a partir do arquivo de configuração e aplica essas configurações imediatamente ao # kernel do sistema operacional.
+
+#------------------------------------------------- ------------------------>
+
+#Libera ou bloqueia as regras no inicio da aplicação das tabelas de filtro
+
+#Libera ou bloqueia  as regras no inicio da aplicação das tabelas de filtro
+
+#iptables -P INPUT ACCEPT
+
+#iptables -P OUTPUT ACCEPT
+
+#iptables -P FORWARD ACCEPT
+
+#iptables -P INPUT DROP
+
+#iptables -P OUTPUT DROP
+
+#iptables -P OUTPUT DROP
+
+# A linha "iptables -P INPUT ACCEPT" é um comando usado em sistemas Linux para configurar o firewall       
+#iptables. Essa linha define especificamente a política padrão da cadeia INPUT como "ACCEPT", ou que       
+# significa que todo tráfego de entrada será permitido, a menos que uma regra específica ou bloqueada.
+# Em outras palavras, esta linha permite o tráfego de entrada
+# A linha "iptables -P OUTPUT ACCEPT" é um comando usado em sistemas Linux para configurar o firewall        
+#iptables. Essa linha define especificamente a política padrão da cadeia OUTPUT como "ACCEPT", ou que       
+# significa que todo tráfego de saída será permitido, a menos que uma regra específica o bloqueie
+# Em outras palavras, esta linha permite que todo tráfego de saída originado do sistema Linux.
+# Essa linha é um comando da ferramenta de firewall iptables em sistemas Linux e define a política padrão   
+# para a cadeia FORWARD como ACCEPT, ou seja, permite o encaminhamento de pacotes entre as interfaces de    
+# rede. Isso significa que, se não houver nenhuma regra específica definida para a cadeia FORWARD, os pacotes
+# serão encaminhados sem restrições.
+# -------------------------------------------------- -------------------------------------------------- ---
+# As regras com DROP executaram as funções contrárias as citadas acima com isso dependendo da configuração
+# é possível bloquear todo o acesso e liberar somente o necessário para o usuário.
+# -------------------------------------------------- -------------------------------------------------- ----
+# Como se trata de um projeto em execução as regras de início de aplicação não serão
+# aplicado por necessidade de verificação de funcionalidade do firewall
+#
+#
+
+#------------------------------------------------- ------------------------>
+
+#----Libera trafego LOOPBACK-----------------------------------
+echo "Libera trafego LOOPBACK"
+
+iptables -A INPUT -i lo -j ACCEPT
+#
+# Essa linha é um comando da ferramenta de firewall iptables em sistemas Linux e adiciona uma nova regra na   
+# cadeia INPUT que permite o tráfego de entrada (-A INPUT) na interface de loopback (-i lo), ou seja, permite
+# que um processo que esta rodando no mesmo computador se comunicando com outro processo utilizando a        
+# interface de rede loopback. O parâmetro "-j ACCEPT" define que os pacotes que atendem a essa regra devem  
+# ser aceito pelo firewall. Em resumo, essa linha permite que um processo local se comunique com outro     
+# processa no mesmo computador através da interface de loopback. Essa regra é geralmente incluída por padrão
+# em muitas configurações de firewall para garantir que os processos do sistema operacional possam ser        
+# comunicar entre si.
+#
+#
+
+iptables -A OUTPUT -o lo -j ACCEPT
+#
+# Essa linha é um comando da ferramenta de firewall iptables em sistemas Linux e adiciona uma nova regra na   
+# cadeia OUTPUT que permite o tráfego de saída (-A OUTPUT) na interface de loopback (-o lo), ou seja, permite
+# que um processo que está rodando no computador envie pacotes para outro processo utilizando a interface de
+# rede loopback.O parâmetro "-j ACCEPT" define que os pacotes que atendem a essa regra devem ser aceitos pelo
+# firewall. Em resumo, essa linha permite que um processo local envie pacotes para outro processo no mesmo   
+# computador através da interface de loopback.Essa regra é geralmente incluída por padrão em muitos          
+# configurações de firewall para garantir que os processos do sistema operacional possam se comunicar entre  
+# si. Além disso, uma interface de loopback é frequentemente usada por aplicativos de rede para se comunicar
+# com outros componentes do sistema, como serviços de banco de dados, servidores web e assim por diante
+#
+#
+
+#------------------------------------------------- -------------
+
+#----Permite pacotes ICM(Entrada e Saida de ping)--------------
+echo "Liberando Protocolo PING"
+
+iptables -A INPUT -p icmp -j ACCEPT
+#
+# Essa linha é um comando da ferramenta de firewall iptables em sistemas Linux e adiciona uma nova regra na
+# cadeia INPUT que permite o tráfego de entrada (-A INPUT) para o protocolo ICMP (-p icmp), que é usado para
+# controle e diagnóstico de rede, como por exemplo, ping e traceroute. O parâmetro "-j ACCEPT" define que os
+# pacotes que atendem a essa regra devem ser aceitos pelo firewall. Em resumo, essa linha permite que pacotes
+# ICMP entrem no sistema, o que pode ser útil para fins de diagnóstico de rede e depuração.
+#
+#
+
+iptables -A OUTPUT -p icmp -j ACCEPT
+#
+# Essa linha é um comando para o utilitário "iptables" no sistema Linux. O comando "iptables" é usado para  
+# definir regras de firewall no sistema, especificando como o tráfego de rede deve ser permitido ou       
+# bloqueado. A linha em questão especifica que todas as saídas de tráfego do protocolo ICMP devem ser     
+# permitidos (-p icmp) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras palavras, essa linha
+# permite que pacotes ICMP sejam enviados pelo sistema.
+# Por questões didáticas e de testes regras foram habilitadas, mas implementações e interessantes    
+# observe a segurança do sistema, portanto, devesse avaliar a necessidade de habilitar ou não o ICMP
+#
+#
+
+#------------------------------------------------- -------------
+
+#----Permite a Saida para Web---------------------------------
+echo "Habilitando Saida HTTP-HTTPS"
+
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+#
+# A linha em questão especifica que todas as saídas de tráfego do protocolo TCP com destino à porta 80 devem
+# ser permitidos (-p tcp --dport 80) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras      
+# palavras, essa linha permite que o tráfego de saída do protocolo TCP com destino à porta 80 seja permitido
+# pelo firewall, o que é comum para permitir acesso a sites HTTP.
+
+iptables -A INPUT -p tcp --sport 80 -j ACCEPT
+#
+# A linha em questão especifica que todas as entradas de tráfego do protocolo TCP com origem na porta 80      
+# deve ser permitido (-p tcp --sport 80) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras #palavras,
+# essa linha permite que o tráfego de entrada do protocolo TCP com origem na porta 80 seja       
+# permitido pelo firewall, o que é comum para permitir conexões de entrada para um servidor web, por exemplo.
+
+iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+#
+# A linha em questão especifica que todas as saídas de tráfego do protocolo TCP com destino à porta 443 devem
+# ser permitidos (-p tcp --dport 443) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras    
+# palavras, essa linha permite que o tráfego de saída do protocolo TCP com destino à porta 443 seja permitido
+# pelo firewall, o que é comum para permitir o acesso a sites HTTPS.
+#
+#
+
+iptables -A INPUT -p tcp --sport 443 -j ACCEPT
+#
+# A linha em questão especifica que todas as entradas de tráfego do protocolo TCP com origem na porta 443  
+# deve ser permitido (-p tcp --sport 443) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras
+# palavras, essa linha permite que o tráfego de entrada do protocolo TCP com origem na porta 443 seja        
+# permitido pelo firewall, o que é comum para permitir conexões de entrada para um servidor web, por exemplo.
+#
+#
+
+#------------------------------------------------- -------------
+
+
+#---- Rede Local <-> Internet ----------------------------------
+
+#----permite acesso SSH----------------------------------------
+echo "Habilitando SSH"
+
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+#
+# A linha em questão especifica que todas as entradas de tráfego do protocolo TCP com destino à porta 22    
+# deve ser permitido (-p tcp --dport 22) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras
+# palavras, essa linha permite que o tráfego de entrada do protocolo TCP com destino à porta 22 seja        
+# permitido pelo firewall. A porta 22 é a porta padrão usada para conexões SSH (Secure Shell), portanto, essa
+# regra permitiria que um usuário externo se conectasse ao sistema por meio do protocolo SSH.
+#
+#
+
+iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+#
+# A linha em questão especifica que todas as saídas de tráfego do protocolo TCP com origem na porta 22 devem
+# ser permitidos (-p tcp --sport 22) e o alvo da regra é definido como "ACCEPT" (-j ACCEPT). Em outras      
+# palavras, essa linha permite que o tráfego de saída do protocolo TCP com origem na porta 22 seja permitido
+# pelo firewall. A porta 22 é a porta padrão usada para conexões SSH (Secure Shell), portanto, essa regra   
+# permitiria que um usuário do sistema se conectasse a um servidor remoto por meio do protocolo SSH.
+#
+#
+
+#------------------------------------------------- -------------
+
+#Mascara internet para rede de fora(NAT)
+echo "Habilitando regra de trafego NAT a DMZ"
+
+iptables -A POSTROUTING -t nat -o enp0s8 -j MASQUERADE
+#
+# A linha em questão especifica que o tráfego de rede deve ser manipulado no pós-roteamento (-A POSTROUTING)
+# usando uma tabela NAT (-t nat). Essa regra faz com que o IP de origem do tráfego de saída seja mascarado (-j MASQUERADE)
+# quando o tráfego estiver saindo pela interface de rede "enp0s8" (-o enp0s8). Em outras       
+# palavras, essa linha é comumente usada para permitir que um conjunto de dispositivos em uma rede privada  
+# tenha acesso à Internet. Quando o tráfego de saída passa por essa regra, o endereço IP da fonte é alterado
+# para o endereço IP da interface de rede "enp0s8", que normalmente é o endereço IP do roteador na rede.    
+# Dessa forma, o tráfego pode passar por roteadores intermediários e chegar à Internet, parecendo ter origem
+# no endereço IP do roteador.
+#
+#
+
+#iptables -A POSTROUTING -t nat -o enp0s3 -j MASQUERADE
+# O mesmo da regra anterior porem para a rede enp0s3, essa regra vai depender da configuração de cada placa
+# de rede dos dispositivos configurados
+#
+#
+
+#------------------------------------------------- ------------------------>
+
+
+########################## Bloqueio de sites por String ################## ####>
+echo "**** INICIANDO BLOQUEIO DE SITES!!! ****"
+
+iptables-restore < /root/regras_salvas.v4
+# comando é utilizada para restaurar as regras de firewall salvas anteriormente em um arquivo de texto 
+# chamado #"regras_salvas.v4" localizado na pasta raiz do sistema ("/root").
+# O comando "iptables-restore" é utilizado para carregar as regras de firewall salvas em um arquivo de texto # para a memória do kernel do sistema. Quando utilizado com o operador "<", o comando lê as regras salvas a  # partir do arquivo especificado como entrada padrão e as restaura no kernel do sistema.
+# Em resumo, essa linha de comando restaura as regras de firewall salvas anteriormente no arquivo             # "regras_salvas.v4" para a configuração atual do firewall Iptables do sistema.
+
+
+
+#CODIGO INICIAL QUE FOI ADAPTADO LOGO A BAIXO
+
+
+iptables -I FORWARD -m string --algo bm --string "$1" -j $2
+#
+# A linha em questão insira (-I FORWARD) uma regra na tabela "FORWARD" que usa o módulo "string" (-m string)
+# para realizar uma correspondência de string na carga útil do pacote de rede. O algoritmo usado para fazer um
+# correspondência é o "bm" (--algo bm) e a string que está sendo procurada é definida pelo valor de "$1" (-- string "$1").
+# O alvo da regra é definido pelo valor de "$2" (-j $2), o que significa que o pacote pode ser
+# aceito, rejeitado, encaminhado para uma cadeia personalizada ou um registro de log. Em outras palavras,  
+# essa linha é usada para procurar uma string específica no pacote de rede e, em seguida, realizar uma ação   
+# com base na correspondência. Por exemplo, se uma string "$1" for encontrada na carga útil do pacote, uma  
+# ação especificada em "$2" será tomada, como encaminhar o pacote para outra cadeia de regras ou registrar a
+#ocorrência em um arquivo de log. Esse tipo de regra pode ser útil para detectar ou filtrar pacotes que    
+# segue certos padrões de dados, como palavras-chave específicas ou sequências de bytes.
+#
+
+iptables -I OUTPUT -m string --algo bm --string "$1" -j $2
+#
+# A linha em questão insira (-I OUTPUT) uma regra na tabela "OUTPUT" que usa o módulo "string" (-m string)   
+# para realizar uma correspondência de string na carga útil do pacote de rede. O algoritmo usado para fazer um
+# correspondência é o "bm" (--algo bm) e a string que está sendo procurada é definida pelo valor de "$1" (-- string "$1").
+# O alvo da regra é definido pelo valor de "$2" (-j $2), o que significa que o pacote pode ser
+# aceito, rejeitado, encaminhado para uma cadeia personalizada ou um registro de log. m outras palavras, essa
+# linha é usada para procurar uma string específica no pacote de rede de saída e, em seguida, realizar uma   
+# ação com base na correspondência. Por exemplo, se uma string "$1" for encontrada na carga útil do pacote de
+# saída, uma ação especificada em "$2" será tomada, como encaminhador o pacote para outra cadeia de regras ou  
+# registrar ocorrência em um arquivo de log. Esse tipo de regra pode ser útil para detectar ou filtrar     
+# pacotes que seguem certos padrões de dados, como palavras-chave específicas ou sequências de bytes, antes   
+# que eles saiam do sistema.
+#
+
+
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m string --string "$1" --algo bm -j $2
+
+
+# Comando da ferramenta de firewall Iptables que adiciona uma nova regra de filtragem para pacotes de saída   # (OUTPUT).A opção "-A" indica que estamos adicionando a nova regra ao final da tabela de regras de filtragem # especificada (neste caso, a tabela OUTPUT).
+# A opção "-p tcp" especifica que a regra deve ser aplicada apenas a pacotes TCP.
+# A opção "-m multiport" é usada para especificar várias portas, neste caso, as portas 80 e 443, que          # correspondem aos protocolos HTTP e HTTPS.
+# A opção "-m string" permite a verificação de uma determinada string nos dados do pacote. Neste caso, a     # opção está sendo usada para verificar se a string "$1" (que provavelmente é uma variável de shell) está    # presente nos dados do pacote.
+# A opção "--algo bm" é usada para especificar o algoritmo usado na verificação da string. Neste caso, o     # algoritmo usado é o Boyer-Moore, um algoritmo eficiente de busca de padrões.
+# Por fim, a opção "-j $2" especifica a ação a ser tomada se a regra for correspondida, em que "$2"          # é uma variável de shell que contém a ação a ser tomada. Neste caso, a ação é especificada                  # pelo valor contido na variável "$2", que pode ser "ACCEPT" para permitir o pacote, "DROP" para descartar o # pacote ou outras ações disponíveis no Iptables.
+
+
+ iptables -A FORWARD -p tcp -m multiport --dports 80,443 -m string --string "$1" --algo bm -j $2
+
+# Comando da ferramenta de firewall Iptables que adiciona uma nova regra de filtragem para pacotes que são   # encaminhados entre duas interfaces (FORWARD).
+# A opção "-A" indica que estamos adicionando a nova regra ao final da tabela de regras de filtragem         # especificada (neste caso, a tabela FORWARD).
+# A opção "-p tcp" especifica que a regra deve ser aplicada apenas a pacotes TCP.
+# A opção "-m multiport" é usada para especificar várias portas, neste caso, as portas 80 e 443, que         # correspondem aos protocolos HTTP e HTTPS.
+# A opção "-m string" permite a verificação de uma determinada string nos dados do pacote. Neste caso, a     # opção está sendo usada para verificar se a string "$1" (que provavelmente é uma variável de shell) está     # presente nos dados do pacote.
+# A opção "--algo bm" é usada para especificar o algoritmo usado na verificação da string. Neste caso, o     # algoritmo usado é o Boyer-Moore, um algoritmo eficiente de busca de padrões.
+# Por fim, a opção "-j $2" especifica a ação a ser tomada se a regra for correspondida, em que "$2"          # é uma variável de shell que contém a ação a ser tomada. Neste caso, a ação é especificada                  # pelo valor contido na variável "$2", que pode ser "ACCEPT" para permitir o pacote, "DROP" para descartar o # pacote ou outras ações disponíveis no Iptables.
+
+
+ iptables -A INPUT -p tcp -m multiport --sports 80,443 -m string --string "$1" --algo bm -j $2
+
+# Comando de firewall Iptables que adiciona uma nova regra de filtragem para pacotes de entrada (INPUT).
+# A opção "-A INPUT" indica que estamos adicionando a nova regra ao final da tabela de regras de filtragem de # pacotes de entrada (INPUT).
+# A opção "-p tcp" especifica que a regra deve ser aplicada apenas a pacotes TCP.
+# A opção "-m multiport" é usada para especificar várias portas, neste caso, as portas 80 e 443, que         # correspondem aos protocolos HTTP e HTTPS.
+# A opção "-m string" permite a verificação de uma determinada string nos dados do pacote. Neste caso, a     # opção está sendo usada para verificar se a string "$1" (que provavelmente é uma variável de shell) está    # presente nos dados do pacote.
+# A opção "--algo bm" é usada para especificar o algoritmo usado na verificação da string. Neste caso, o      # algoritmo usado é o Boyer-Moore, um algoritmo eficiente de busca de padrões.
+# A opção "--sports" é usada para especificar a porta de origem dos pacotes, que neste caso é a porta 80 ou   # 443.
+# Por fim, a opção "-j $2" especifica a ação a ser tomada se a regra for correspondida, em que "$2"          # é uma variável de shell que contém a ação a ser tomada. Neste caso, a ação é especificada pelo valor       # contido na variável "$2", que pode ser "ACCEPT" para permitir o pacote, "DROP" para descartar o pacote ou   # outras ações disponíveis no Iptables.
+
+
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+################################################### #############################>
+
+#------------------------------------------------- ------------------------>
+
+
+
+opcao="";
+if [ "$2" = "ACCEPT" ]; then
+  opcao="LIBERADO"
+elif [ "$2" = "DROP" ]; then
+  opcao="BLOQUEADO"
+else
+  echo "Opção inválida!"
+  exit 1
+fi
+
+
+# Este script em shell que verifica qual ação será tomada para um determinado conjunto de regras de firewall # no Iptables.
+# A variável "opcao" é inicializada com uma string vazia (""). Essa variável será usada posteriormente para   # armazenar o resultado da ação tomada.
+# A estrutura de controle "if-elif-else" verifica o valor da variável "$2", que provavelmente é a ação a ser # tomada em caso de correspondência da regra no Iptables.
+# Se o valor for "ACCEPT", significa que o pacote será aceito e a variável "opcao" é definida como           # "LIBERADO".
+# Se o valor for "DROP", significa que o pacote será descartado e a variável "opcao" é definida como         # "BLOQUEADO".
+# Se o valor não for "ACCEPT" nem "DROP", a mensagem "Opção inválida!" será exibida na tela e o script será   # encerrado com o código de saída 1.
+# No final do script, a variável "opcao" contém o resultado da ação tomada para as regras de firewall.
+
+
+###################################################################################################>
+
+#----------------------------------------------------------------------------------
+
+
+#Bloqueia tudo que não esta liberado pelas regras
+
+# iptables -P INPUT DROP
+
+# Comando Iptables que define a política padrão para a cadeia de regras de filtragem                         # de pacotes de entrada (INPUT) como "DROP".
+# A política padrão é a ação tomada pelo firewall quando um pacote não corresponde a nenhuma regra definida   # na cadeia. No caso deste comando, a política padrão é definida como "DROP", o que significa que todos os    # pacotes de entrada serão descartados, a menos que correspondam a alguma regra específica.
+# Essa é uma configuração de segurança comum para proteger um sistema, pois bloqueia todos os pacotes de     # entrada, exceto aqueles permitidos por regras explícitas adicionadas à cadeia de regras de filtragem de    # pacotes de entrada (INPUT).
+
+# iptables -P OUTPUT DROP
+#
+# Comando que tenta definir a política padrão para a cadeia de regras de filtragem de pacotes de saída       # (OUTPUT) como "DRO", o que provavelmente é um erro de digitação.
+# No entanto, como "DRO" não é uma política padrão válida, esse comando provavelmente produzirá uma mensagem # de erro informando que a política especificada é desconhecida.
+# Em geral, a política padrão da cadeia de saída (OUTPUT) é definida como "ACCEPT", permitindo que todos os   # pacotes sejam enviados pelo sistema a menos que sejam bloqueados por regras específicas adicionadas à      # cadeia de regras de filtragem de pacotes de saída (OUTPUT).
+
+
+# iptables -P FORWARD DROP
+
+
+# Comando da ferramenta de firewall Iptables que define a política padrão para a cadeia de regras de         # filtragem de pacotes em trânsito (FORWARD) como "DROP".
+# A política padrão é a ação tomada pelo firewall quando um pacote não corresponde a nenhuma regra definida   # na cadeia. No caso deste comando, a política padrão é definida como "DROP", o que significa que todos os   # pacotes em trânsito serão descartados, a menos que correspondam a alguma regra específica.
+# Essa é uma configuração de segurança comum para proteger um sistema ou uma rede, pois bloqueia todos os    # pacotes em trânsito, exceto aqueles permitidos por regras explícitas adicionadas à cadeia de regras de     # filtragem de pacotes em trânsito (FORWARD).
+
+echo""
+echo""
+echo "********* FIREWALL ATIVADO *********"
+echo""
+
+
+iptables-save > /root/regras_salvas.v4
+
+# Comando Iptables que salva todas as regras atuais da tabela de regras do firewall em um arquivo chamado    # "regras_salvas.v4" no diretório raiz (/root) do sistema.
+# O sinal ">" é um operador de redirecionamento usado para redirecionar a saída de um comando para um arquivo # em vez de para a saída padrão do terminal.
+# Ao usar o operador de redirecionamento com o comando iptables-save, o resultado é salvo em um arquivo em    # vez de ser exibido na saída do terminal.
+# Este arquivo pode ser usado para restaurar as regras do firewall no futuro usando o comando "iptables-     # restore". É uma boa prática salvar as regras do firewall em um arquivo para evitar a perda de configurações # importantes ou para clonar as configurações de firewall em outros sistemas.
+
+
