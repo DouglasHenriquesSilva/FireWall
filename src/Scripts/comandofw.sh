@@ -167,23 +167,33 @@ iptables -A POSTROUTING -t nat -o enp0s8 -j MASQUERADE
 echo "+++++++++++++++++++++++++++++++++++++++++++++++"
 echo "**** INICIANDO BLOQUEIO DE SITES!!! ****"
 echo""
-echo""
+
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
 # Carrega as regras salvas anteriormente
   iptables-restore < /root/regras_salvas.v4
-echo""
-echo""
+  echo""
+
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
-
-# iptables -I FORWARD -m string --algo bm --string "$1" -j $2
-# iptables -I OUTPUT -m string --algo bm --string "$1" -j $2
-
 
 #§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 
+# Código que vai "capturar" os sites a serem bloqueados/liberados
+if [ -z "$2" ]; then
+  echo "O segundo argumento Liberado/Bloqueado está faltando. Forneça um valor válido para a opção do Firewall."
+  
+echo""
+echo""
+echo""
+  echo  "********* FIREWALL ATIVADO *********"
+echo""
+  exit 1
+fi
 
 
-# Parte do código que vai "capturar" os sites a serem bloqueados/liberados
+
+
+
+
 if [ "$2" = "ACCEPT" ]; then
   iptables-save | grep -v "$1" | iptables-restore
 else
@@ -192,57 +202,13 @@ else
 fi
 
 echo "As regras foram configuradas."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Parte do codigo que vai "capturar" os sites a serem Bloqueados/liberados
-# iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m string --string "$1" --algo bm -j $2
-# iptables -A FORWARD -p tcp -m multiport --dports 80,443 -m string --string "$1" --algo bm -j $2
-# iptables -A IMPUT -p tcp -m multiport --Sports 80,443 -m string --string "$1" --algo bm -j $2
-echo "As regras foram configuradas. "
-
 #§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Teste de Bloqueio/Liberação de sites pelo terminal
-# opcao="";
-# if [ "$2" = "ACCEPT" ]; then
-#   opcao="LIBERADO"
-# elif [ "$2" = "DROP" ]; then
-#   opcao="BLOQUEADO"
-# else
-#  echo""
-#  echo "Opção inválida nenhum site adicionado pelo terminal!"
-#  exit 1
-# fi
-# echo ------------------------------------------------------------------------
-# echo""
-# echo "O site $1 foi $opcao"
-# echo""
-# echo ------------------------------------------------------------------------
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo""
 echo""
 echo""
 echo  "********* FIREWALL ATIVADO *********"
 echo""
-
 
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
 # Salvas as regras  inseridas
@@ -250,6 +216,6 @@ echo""
  
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
  #iptables -L
-
+ 
 
 
