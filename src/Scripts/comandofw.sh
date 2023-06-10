@@ -14,6 +14,12 @@ if [ ! -f "/root/regras_salvas.v4" ]; then
   touch /root/regras_salvas.v4
 fi
 
+#Desliga interface de rede interna(verificar nome da rede de acordo com cada computador)
+echo "Desabilitando rede interna"
+ ip link set enp0s3 down
+ sleep 3
+
+
 
 #Libera ou bloqueia  as regras no inicio da aplicação das tabelas de filtro
 
@@ -212,9 +218,14 @@ echo""
 
 #¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
 # Salvas as regras  inseridas
+
  iptables-save > /root/regras_salvas.v4
  
-#¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
+¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨
+#Habilita a rede interna(verificar nome da rede de acordo com cada computador)
+echo "habilitando rede interna"
+ ip link set enp0s3 up
+ 
  #iptables -L
  
 
