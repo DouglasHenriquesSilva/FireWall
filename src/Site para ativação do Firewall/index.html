@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Firewall Igarapé</title>
+  <style>
+    /* Estilos CSS */
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url(imagens/fundo.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+  
+    .links a {
+     color: rgb(100, 143, 245); /* Cor dos links normais */
+     text-decoration: none; /* Remover sublinhado dos links */
+    }
+
+    .links a:hover {
+     color: red; /* Cor dos links quando o mouse está sobre eles */
+    }
+
+    .links a:active {
+    color: green; /* Cor dos links quando são clicados */
+     }
+
+     .links a {
+     font-size: 22px; /* Substitua "18px" pelo tamanho desejado */
+    }
+  
+    .container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      position: absolute;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .input-large {
+      font-size: 20px;
+    }
+  
+    .form-group {
+      margin-bottom: 15px;
+    }
+  
+    label {
+      display: block;
+      font-weight: bold;
+      color: rgb(240, 106, 10);
+    }
+  
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+    }
+  
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+  
+    .btn-block {
+      background-color: #FF0000;
+      color: #fff;
+    }
+  
+    .btn-block:hover {
+      background-color: #CC0000;
+    }
+  
+    .btn-allow {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+  
+    .btn-allow:hover {
+      background-color: #45a049;
+    }
+  
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+
+    /* Media queries para tornar o código responsivo */
+    @media (max-width: 600px) {
+      .container {
+        max-width: 100%;
+        padding: 0 20px;
+      }
+    }
+  </style>
+
+  <script>
+    function blockSite() {
+      var site = document.getElementById("site").value;
+      if (site.trim() === "") {
+        alert("É necessário inserir um site!");
+        return;
+      }
+      window.location = "http://10.42.0.1:5146/firewall/" + site + "/DROP";
+    }
+
+    function allowSite() {
+      var site = document.getElementById("site").value;
+      if (site.trim() === "") {
+        alert("É necessário inserir um site!");
+        return;
+      }
+      window.location = "http://10.42.0.1:5146/firewall/" + site + "/ACCEPT";
+    }
+  </script>
+
+</head>
+<body>
+  <header class="cabecalho2">
+    <section class="links">
+      <a href="http://127.0.0.1:5500/index.html" title="Pagina inicial do projeto">Home</a>
+      <a href="Colocar Contatos" title="Pagina de contatos sobre o Projeto">Contatos</a>
+      <a href="video/ajuda.mp4" title="Video sobre como fazer o bloqueio ou liberação de Sites">Ajuda</a>
+      <a href="https://github.com/DouglasHenriquesSilva/Firewall" title="Pagina de explicação GitRub ">Sobre</a>
+    </section>
+  </header>
+
+
+
+  <div class="container">
+    <div class="form-group">
+      <input type="text" id="site" placeholder="www.exemplo.com.br" class="input-large">
+      <label for="site">Digite o nome do site:</label>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-block" onclick="blockSite()">Bloquear Acesso</button>
+      <button class="btn btn-allow" onclick="allowSite()">Liberar Acesso</button>
+    </div>
+  </div>
+
+  
+    <!-- http://172.16.111.254:5146/firewall/www.igarape.mg.gov.br/DROP> -->
+</body>
+
+
+</html>
